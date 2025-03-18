@@ -1,0 +1,10 @@
+<!-- test-endpoints.component.html -->
+<div>
+    <h2>Test Endpoints</h2>
+    <button (click)="testGet()">Simular GET</button>
+    <button (click)="testPost()">Simular POST</button>
+  
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <pre *ngIf="data">{{ data | json }}</pre>
+  </div>
+  
