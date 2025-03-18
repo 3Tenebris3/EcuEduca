@@ -1,26 +1,35 @@
 // src/app/core/services/auth/auth.service.ts
 import { Injectable } from '@angular/core';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private tokenKey = 'access_token';
+  private tokenKey = 'access_token'; //***
+  private secret = 'SECRET_KEY'; //***
 
-  constructor() {}
-
-  // Guarda el token en localStorage (o sessionStorage)
   storeToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
+    // Encriptamos con AES
+    const ciphertext = CryptoJS.AES.encrypt(token, this.secret).toString();
+    localStorage.setItem(this.tokenKey, ciphertext);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    const ciphertext = localStorage.getItem(this.tokenKey);
+    if (!ciphertext) return null;
+
+    try {
+      const bytes = CryptoJS.AES.decrypt(ciphertext, this.secret);
+      return bytes.toString(CryptoJS.enc.Utf8);
+    } catch(e) {
+      console.error('Error al desencriptar token', e);
+      return null;
+    }
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token; // true si existe un token
+    return !!this.getToken();
   }
 
   logout(): void {

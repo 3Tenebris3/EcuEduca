@@ -1,1 +1,29 @@
-/* You can add global styles to this file, and also import other style files */
+// src/styles.scss
+
+@import 'styles/variables';
+@import 'styles/mixins';
+
+body {
+  font-family: $main-font;
+  background-color: $background-color;
+  margin: 0;
+  padding: 0;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackbar-success {
+  background-color: #4caf50; /* Verde */
+  color: #fff;
+}
+
+.snackbar-error {
+  background-color: #f44336; /* Rojo */
+  color: #fff;
+}
+
+.snackbar-warning {
+  background-color: #ff9800; /* Naranja */
+  color: #fff;
+}
