@@ -1,0 +1,21 @@
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f5f5f5;
+  }
+  
+  mat-card {
+    width: 380px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  
+    .banner { width: 100%; border-radius: 6px; margin-bottom: 1rem; }
+    h2      { text-align: center; margin: 0 0 1rem; }
+  
+    .full { width: 100%; }
+  }
+  

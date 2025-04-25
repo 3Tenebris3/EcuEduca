@@ -1,0 +1,29 @@
+<mat-sidenav-container class="dash-container">
+    <mat-sidenav #drawer mode="side" class="sidenav" opened>
+      <mat-nav-list>
+        <a mat-list-item routerLink="/dashboard/overview" routerLinkActive="active">Inicio</a>
+        <a mat-list-item routerLink="/dashboard/profile"  routerLinkActive="active">Perfil</a>
+        <a mat-list-item routerLink="/dashboard/settings" routerLinkActive="active">Ajustes</a>
+      </mat-nav-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+      <!-- HEADER -->
+      <mat-toolbar color="primary">
+        <button mat-icon-button (click)="drawer.toggle()"><mat-icon>menu</mat-icon></button>
+        <span class="flex-1">EcuEduca</span>
+        <button mat-button routerLink="/login">Salir</button>
+      </mat-toolbar>
+  
+      <!-- MAIN -->
+      <main class="main-content">
+        <router-outlet></router-outlet>
+      </main>
+  
+      <!-- FOOTER -->
+      <footer>
+        © 2025 EcuEduca – Todos los derechos reservados
+      </footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

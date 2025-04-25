@@ -1,29 +1,22 @@
 // src/app/app.component.ts
-import { Component, computed, signal } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { AuthService } from './core/services/auth/auth.service';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { SessionService } from '../app/core/services/session.service'; // Adjust the path as needed
+import { GetProfileUseCase } from '../app/features/auth/application/auth.use-case'; // Adjust the path as needed
 
 @Component({
-  standalone: true,
+  standalone: false,
   selector: 'app-root',
-  imports: [CommonModule, RouterLink, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: '<router-outlet></router-outlet>',
 })
 export class AppComponent {
-  // Opción A: Consultar AuthService.isAuthenticated() en un getter
-  // Opción B: Usar signals, etc.
+  constructor(
+    private session: SessionService,
+    private getProfileUC: GetProfileUseCase
+  ) {}
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  get isLoggedIn(): boolean {
-    return this.authService.isAuthenticated();
-  }
-
-  logout(): void {
-    this.authService.logout();
-    // luego rediriges, p.ej. a /login
-    this.router.navigate(['/login']);
+  ngOnInit() {
+    if (this.session.isAuth && !this.session.user) {
+      this.getProfileUC.exec().subscribe(); // carga perfil silencioso
+    }
   }
 }

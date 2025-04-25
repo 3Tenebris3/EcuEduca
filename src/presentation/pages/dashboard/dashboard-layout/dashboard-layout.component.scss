@@ -1,0 +1,19 @@
+.dash-container { height: 100vh; }
+.sidenav { width: 220px; }
+
+mat-toolbar { position: sticky; top: 0; z-index: 1000; }
+
+.main-content {
+  padding: 1.5rem;
+  min-height: calc(100vh - 64px - 56px);   // header + footer
+}
+
+footer {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  color: #555;
+  font-size: 0.85rem;
+}

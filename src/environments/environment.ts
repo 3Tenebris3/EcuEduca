@@ -1,14 +1,4 @@
-// src/environments/environment.ts
 export const environment = {
-    production: false,
-    firebaseConfig: {
-      apiKey: '',
-      authDomain: '',
-      projectId: '',
-      storageBucket: '',
-      messagingSenderId: '',
-      appId: '',
-      measurementId: ''
-    }
-  };
-  
+  production: false,
+  apiUrl: 'http://localhost:3000'  // tu backend local
+};

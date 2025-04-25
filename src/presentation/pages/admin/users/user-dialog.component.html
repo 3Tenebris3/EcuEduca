@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ data ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()" mat-dialog-content>
+
+  <!-- Nombre -->
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Nombre</mat-label>
+    <input matInput formControlName="displayName" />
+    <mat-error *ngIf="form.get('displayName')?.invalid">Requerido</mat-error>
+  </mat-form-field>
+
+  <!-- Email -->
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" />
+    <mat-error *ngIf="form.get('email')?.invalid">Email inválido</mat-error>
+  </mat-form-field>
+
+  <!-- Rol -->
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Rol</mat-label>
+    <mat-select formControlName="role">
+      <mat-option value="admin">admin</mat-option>
+      <mat-option value="teacher">teacher</mat-option>
+      <mat-option value="student">student</mat-option>
+      <mat-option value="parent">parent</mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('role')?.invalid">Requerido</mat-error>
+  </mat-form-field>
+
+  <!-- Acciones -->
+  <div mat-dialog-actions align="end" class="actions">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="primary"
+            type="submit" [disabled]="form.invalid">Guardar</button>
+  </div>
+</form>

@@ -1,0 +1,47 @@
+<div class="auth-wrapper">
+  <mat-card>
+    <!-- Imagen ilustrativa -->
+    <img class="banner" src="https://source.unsplash.com/featured/?education" alt="banner" />
+
+    <h2>{{ isLoginMode ? 'Iniciar sesión' : 'Crear cuenta' }}</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" formControlName="email" />
+        <mat-error *ngIf="form.get('email')?.invalid">Correo inválido</mat-error>
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-error *ngIf="form.get('password')?.invalid">Obligatorio</mat-error>
+      </mat-form-field>
+
+      <!-- DisplayName (solo registro) -->
+      <mat-form-field *ngIf="!isLoginMode" appearance="outline" class="full">
+        <mat-label>Nombre completo</mat-label>
+        <input matInput formControlName="displayName" />
+        <mat-error *ngIf="form.get('displayName')?.invalid">Obligatorio</mat-error>
+      </mat-form-field>
+
+      <!-- Botón principal -->
+      <button mat-raised-button color="primary" class="full" type="submit" [disabled]="loading">
+        {{ isLoginMode ? 'Entrar' : 'Registrarse' }}
+      </button>
+
+      <!-- Switch de modo -->
+      <button mat-button type="button" (click)="toggleMode()">
+        {{ isLoginMode ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión' }}
+      </button>
+
+      <!-- Barra de progreso -->
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+      <!-- Error backend -->
+      <mat-error *ngIf="errorMsg">{{ errorMsg }}</mat-error>
+    </form>
+  </mat-card>
+</div>

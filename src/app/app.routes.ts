@@ -1,22 +1,33 @@
 // src/app/app.routes.ts
-
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { noAuthGuard } from './core/guards/no-auth.guard';
-import { HomeComponent } from './presentation/pages/home/home.component';
-import { LoginComponent } from './presentation/pages/login/login.component';
-import { NotFoundComponent } from './presentation/pages/not-found/not-found.component';
+import { authGuard }  from '@core/guards/auth.guard';
+import { guestGuard } from '@core/guards/guest.guard';
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
-    canActivate: [noAuthGuard], 
+    loadChildren: () =>
+      import('../presentation/pages/auth/auth-ui.module')
+        .then(m => m.AuthUiModule),
+    canActivate: [guestGuard]
   },
+
   {
-    path: '',
-    component: HomeComponent,
-    canActivate: [authGuard],
+    path: 'dashboard',
+    loadChildren: () =>
+      import('../presentation/pages/dashboard/dashboard-ui.module')
+        .then(m => m.DashboardUiModule),
+    canActivate: [authGuard]
   },
-  { path: '**', component: NotFoundComponent } // último
+
+  /* Ruta 404 */
+  {
+    path: 'error',
+    loadComponent: () =>
+      import('../presentation/pages/not-found/not-found.component')
+        .then(c => c.NotFoundComponent)
+  },
+
+  /* catch‑all */
+  { path: '**', redirectTo: 'error' }
 ];
