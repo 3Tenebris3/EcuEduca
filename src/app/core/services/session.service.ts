@@ -1,31 +1,33 @@
-import { Injectable } from "@angular/core";
-import { UserModel } from "@features/auth/domain/auth.dto";
+import { Injectable } from '@angular/core';
+import { User } from '@features/auth/domain/auth.dto';
 
 @Injectable({ providedIn: 'root' })
 export class SessionService {
-  private TK = 'token';
-  private USR = 'user';
-  private _user?: UserModel;
+  private _user: User | null = null;
 
-  /* ---------- token ---------- */
-  setToken(t: string)  { localStorage.setItem(this.TK, t); }
-  get token(): string | null { return localStorage.getItem(this.TK); }
-  clearToken()         { localStorage.removeItem(this.TK); }
+  /* ========== TOKENS ========== */
+  get token(): string | null { return localStorage.getItem('token'); }
+  get refresh(): string | null { return localStorage.getItem('refresh'); }
 
-  /* ---------- perfil ---------- */
-  setUser(u: UserModel) {
-    this._user = u;
-    localStorage.setItem(this.USR, JSON.stringify(u));
-  }
-  get user(): UserModel | undefined {
-    return this._user ?? JSON.parse(localStorage.getItem(this.USR) || 'null');
-  }
-  get role(): string { return this.user?.roles[0] || ''; }
+  /* ========== USUARIO Y ROL ========== */
+  get user(): User | null { return this._user; }
+  get role(): string | null { return this._user?.role ?? null; }
+
+  /* === NUEVO getter isAuth === */
   get isAuth(): boolean { return !!this.token; }
 
+  /* ========== MÉTODOS ========== */
+  start(user: User, tokens: { access: string; refresh: string }) {
+    this._user = user;
+    localStorage.setItem('token', tokens.access);
+    localStorage.setItem('refresh', tokens.refresh);
+  }
+
+  setUser(user: User) { this._user = user; }
+
   clear() {
-    this.clearToken();
-    localStorage.removeItem(this.USR);
-    this._user = undefined;
+    this._user = null;
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
   }
 }

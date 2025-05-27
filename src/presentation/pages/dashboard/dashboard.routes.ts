@@ -7,17 +7,13 @@ export const dashboardRoutes: Routes = [
     path: '',
     component: DashboardLayoutComponent,
     children: [
-      {
-        path: 'overview',
-        loadComponent: () =>
-          import('./pages/overview.component').then((c) => c.OverviewComponent),
-      },
+      { path: 'home', loadComponent: () => import('@features/home/home-dashboard.component').then(m => m.HomeDashboardComponent) },
       {
         path: 'users',
         loadChildren: () =>
           import('../admin/users/users-ui.routes').then((r) => r.usersUiRoutes),
       },
-      { path: '', pathMatch: 'full', redirectTo: 'overview' },
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
     ],
   },
 ];

@@ -31,7 +31,7 @@ import { SessionService } from '@core/services/session.service';
 export class NotFoundComponent {
   constructor(private router: Router, private session: SessionService) {}
   goHome() {
-    const target = this.session.isAuth ? '/dashboard' : '/login';
+    const target = this.session ? '/dashboard' : '/login';
     this.router.navigate([target]);
   }
 }

@@ -1,0 +1,15 @@
+<div class="greeting">
+  ¡Hola&nbsp;<strong>{{ userName }}</strong>!
+</div>
+
+<div class="grid">
+  <mat-card *ngFor="let c of cards"
+            (click)="go(c)"
+            class="stat"
+            [ngStyle]="{ '--accent': c.color }">
+    <span class="material-symbols-rounded icon">{{ c.icon }}</span>
+
+    <h3 class="title">{{ c.label }}</h3>
+    <p  class="sub">{{ c.subtitle }}</p>
+  </mat-card>
+</div>

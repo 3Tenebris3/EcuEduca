@@ -23,7 +23,9 @@
       "@api/*": ["./src/app/api/*"],
       "@features/*": ["./src/app/features/*"],
       "@shared/*": ["./src/app/shared/*"],
-      "@presentation/*": ["./src/presentation/*"]
+      "@presentation/*": ["./src/presentation/*"],
+      "@pages/*": ["./src/presentation/pages/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "angularCompilerOptions": {

@@ -3,12 +3,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import { SessionService } from '@core/services/session.service';
-import { LoginUseCase, RegisterUseCase }  from '@features/auth/application/auth.use-case';
-import { AuthModule } from '@features/auth/auth.module';
+import { LoginUseCase, RegisterUseCase } from '@features/auth/application/auth.use-case';
 import { UiModule } from '@shared/ui/ui.module';
 
 @Component({
+  standalone: true,                              // ✔ si usas standalone
   selector: 'app-login-register',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -16,8 +15,7 @@ import { UiModule } from '@shared/ui/ui.module';
     CommonModule,
     ReactiveFormsModule,
     UiModule,
-    RouterModule,
-    AuthModule
+    RouterModule
   ]
 })
 export class LoginComponent {
@@ -31,13 +29,12 @@ export class LoginComponent {
     private fb: FormBuilder,
     private loginUC: LoginUseCase,
     private registerUC: RegisterUseCase,
-    private session: SessionService,
     private router: Router
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      displayName: ['']                // requerido solo al registrar
+      displayName: ['']            // requerido sólo para registro
     });
   }
 
@@ -47,36 +44,28 @@ export class LoginComponent {
     this.form.get('displayName')?.reset();
   }
 
-  /** Envía datos al backend */
-  submit() {
+  /** Enviar al backend */
+  submit(): void {
     if (this.form.invalid) return;
+
     this.loading = true;
-  
     const { email, password, displayName } = this.form.value;
+
     const obs$ = this.isLoginMode
-        ? this.loginUC.exec({ email, password })
-        : this.registerUC.exec({ email, password, displayName, role: 'student' });
-  
+      ? this.loginUC.exec({ email, password })
+      : this.registerUC.exec({ email, password, displayName, role: 'teacher' /* ó admin*/ });
+
     obs$.subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(
-          this.isLoginMode ? ['/dashboard'] : ['/login']
-        );
+        // -> Luego el guard de roles redirige al módulo correcto
+        this.router.navigate(['/dashboard']);
       },
-      error: e => { this.loading=false; this.errorMsg='Error'; console.error(e); }
+      error: (err: any) => {
+        this.loading = false;
+        this.errorMsg = err?.error?.message ?? 'Algo salió mal';
+        console.error(err);
+      }
     });
-  }
-  
-
-  /** Redirige según rol guardado en sesión */
-  private redirectByRole(): void {
-    const r = this.session.role;
-    const dest =
-      r === 'admin'   ? '/admin'   :
-      r === 'teacher' ? '/teacher' :
-      r === 'student' ? '/student' : '/dashboard';
-
-    this.router.navigate([dest]);
   }
 }

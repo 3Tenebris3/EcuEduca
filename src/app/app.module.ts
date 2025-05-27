@@ -1,26 +1,27 @@
-// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import { routes } from './app.routes';
-import { CoreModule } from './core/core.module';
-import { ApiModule }  from './api/api.module';
-import { UiModule }   from './shared/ui/ui.module';
+/* Rutas */
+import { APP_ROUTES } from './app.routes';
 
-import { AppComponent } from './app.component';   // stand‑alone
+/* Root component */
+import { AppComponent } from './app.component';
+
+/* Interceptor JWT */
+import { AuthTokenInterceptor } from '@core/interceptors/auth-token.interceptor';
 
 @NgModule({
-  declarations: [AppComponent],          // ① ahora va en declarations
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
-    CoreModule,
-    ApiModule,
-    UiModule
+    HttpClientModule,
+    RouterModule.forRoot(APP_ROUTES)
   ],
-  bootstrap: [AppComponent]  
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,11 +1,11 @@
-// dashboard-layout.component.ts
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
+
+import { SessionService } from '@core/services/session.service';
 
 @Component({
   standalone: true,
@@ -13,12 +13,24 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.scss'],
   imports: [
+    CommonModule,
+    RouterModule,
     MatToolbarModule,
-    MatSidenavModule,
-    MatListModule,
     MatIconModule,
-    MatButtonModule,
-    RouterOutlet
-  ]
+    MatMenuModule
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardLayoutComponent {}
+export class DashboardLayoutComponent {
+  private session = inject(SessionService);
+  private router  = inject(Router);
+
+  user = this.session.user;
+
+  gotoHome() { this.router.navigate(['/dashboard/home']); }
+
+  logout() {
+    this.session.clear();
+    this.router.navigate(['/auth']);
+  }
+}

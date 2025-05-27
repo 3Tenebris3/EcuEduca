@@ -12,7 +12,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   /* Siempre permitimos /dashboard, incluso si el rol aún es desconocido */
   if (state.url.startsWith('/dashboard')) return true;
 
-  const allowed = perms(session.role);          // función switch(role)
+  const allowed = perms(session.role ?? '');          // función switch(role)
   if (!allowed.includes(state.url)) {
     router.navigate(['/error']);
     return false;
